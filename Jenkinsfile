@@ -22,5 +22,8 @@ pipeline {
                 }
             }
         }
+        stage('Deploy') {
+            sh 'mvn dockerfile:push'
+        }
     }
 }
