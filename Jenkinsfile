@@ -24,7 +24,10 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'mvn dockerfile:push'
+                withCredentials([usernamePassword(credentialsId: 'Docker Hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh "docker login -u '${USERNAME}' -p '${PASSWORD}'"
+                    sh 'mvn dockerfile:push'
+                }
             }
         }
     }
