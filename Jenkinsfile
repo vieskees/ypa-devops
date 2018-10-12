@@ -18,7 +18,6 @@ pipeline {
             }
         }
         stage('Package') {
-            agent any
             steps{
                 script {
                   DOCKER_IMAGE = docker.build DOCKER_IMAGE_NAME + ":$BUILD_NUMBER"
