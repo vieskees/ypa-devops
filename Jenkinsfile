@@ -18,7 +18,6 @@ pipeline {
             }
         }
         stage('Package') {
-            agent any
             steps{
                 sh 'docker ps'
                 script {
@@ -37,7 +36,6 @@ pipeline {
             }
         }
         stage('Deploy') {
-            agent any
             steps {
                 script {
                   docker.withRegistry('', REGISTRY_CREDENTIALS ) {
