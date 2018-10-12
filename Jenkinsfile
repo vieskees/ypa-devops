@@ -18,7 +18,7 @@ pipeline {
             }
         }
         stage('Package') {
-            agent { label 'dockerHubLabel' }
+            agent any
             steps{
                 script {
                     DOCKER_IMAGE = docker.build DOCKER_IMAGE_NAME + ":$BUILD_NUMBER"
@@ -36,7 +36,7 @@ pipeline {
             }
         }
         stage('Deploy') {
-            agent { label 'dockerHubLabel' }
+            agent any
             steps {
                 script {
                   docker.withRegistry('', REGISTRY_CREDENTIALS ) {
