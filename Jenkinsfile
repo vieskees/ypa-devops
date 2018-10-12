@@ -8,7 +8,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3-alpine'
-            args '-u "root" -v /root/.m2:/root/.m2 -v /var/run/docker.sock:/var/run/docker.sock --privileged'
+            args '-u "root" -v /root/.m2:/root/.m2'
         }
     }
     stages {
