@@ -1,7 +1,9 @@
 pipeline {
     environment {
         DOCKER_IMAGE_NAME = "moduo/devops"
-        DOCKER_IMAGE = "${DOCKER_IMAGE_NAME}:v${BUILD_NUMBER}"
+        DOCKER_IMAGE_FULL_NAME = "${DOCKER_IMAGE_NAME}:v${BUILD_NUMBER}"
+        REGISTRY_CREDENTIALS = "DockerHub"
+        DOCKER_IMAGE = ''
     }
     agent {
         docker {
@@ -13,7 +15,14 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
-                sh "docker build -t ${DOCKER_IMAGE} ."
+            }
+        }
+        stage('Package') {
+            agent any
+            steps{
+                script {
+                  DOCKER_IMAGE = docker.build DOCKER_IMAGE_NAME + ":$BUILD_NUMBER"
+                }
             }
         }
         stage('Test') {
@@ -28,7 +37,11 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh "docker push ${DOCKER_IMAGE}"
+                script {
+                  docker.withRegistry('', REGISTRY_CREDENTIALS ) {
+                    DOCKER_IMAGE.push()
+                  }
+                }
             }
         }
     }
