@@ -1,4 +1,8 @@
 pipeline {
+    environment {
+        DOCKER_IMAGE_NAME = "moduo/devops"
+        DOCKER_IMAGE = DOCKER_IMAGE_NAME + ":v" + BUILD_NUMBER
+    }
     agent {
         docker {
             image 'maven:3-alpine'
@@ -9,7 +13,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
-                sh 'mvn install dockerfile:build'
+                sh "docker build -t ${DOCKER_IMAGE} ."
             }
         }
         stage('Test') {
@@ -24,7 +28,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'mvn dockerfile:push'
+                sh "docker push ${DOCKER_IMAGE}"
             }
         }
     }
