@@ -18,8 +18,11 @@ pipeline {
             }
         }
         stage('Package') {
+            agent { label 'dockerHubLabel' }
             steps{
-                DOCKER_IMAGE = docker.build DOCKER_IMAGE_NAME + ":$BUILD_NUMBER"
+                script {
+                    DOCKER_IMAGE = docker.build DOCKER_IMAGE_NAME + ":$BUILD_NUMBER"
+                }
             }
         }
         stage('Test') {
@@ -33,9 +36,12 @@ pipeline {
             }
         }
         stage('Deploy') {
+            agent { label 'dockerHubLabel' }
             steps {
+                script {
                   docker.withRegistry('', REGISTRY_CREDENTIALS ) {
                     DOCKER_IMAGE.push()
+                  }
                 }
             }
         }
