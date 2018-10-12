@@ -1,7 +1,7 @@
 pipeline {
     environment {
         DOCKER_IMAGE_NAME = "moduo/devops"
-        DOCKER_IMAGE = DOCKER_IMAGE_NAME + ":v" + BUILD_NUMBER
+        DOCKER_IMAGE = "${DOCKER_IMAGE_NAME}:v${BUILD_NUMBER}"
     }
     agent {
         docker {
