@@ -19,9 +19,7 @@ pipeline {
         }
         stage('Package') {
             steps{
-                script {
-                  DOCKER_IMAGE = docker.build DOCKER_IMAGE_NAME + ":$BUILD_NUMBER"
-                }
+                DOCKER_IMAGE = docker.build DOCKER_IMAGE_NAME + ":$BUILD_NUMBER"
             }
         }
         stage('Test') {
@@ -36,10 +34,8 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                script {
                   docker.withRegistry('', REGISTRY_CREDENTIALS ) {
                     DOCKER_IMAGE.push()
-                  }
                 }
             }
         }
